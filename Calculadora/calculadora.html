@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+    *{ 
+        margin: 0;
+        padding: 0;
+    }
+    .fundo{
+        background-image:linear-gradient(45deg,black, #4b0081 );
+        height: 100vh;
+        color: #cb9bde;
+        font-family:Gatte Modern Light ;
+    }
+    .Calculator{
+        position: absolute;
+        background-color: black;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        font-size: 15px;
+    }
+    .fotter{
+        position: absolute;
+        top:80%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        color: #cb9bde;
+        font-family: Gatte Modern Extralight;
+    }
+    .botao{ width: 60px;
+        height:60px;
+        font-size: 25px ;
+        font-family:Segoe UI Light;
+        cursor: pointer;
+        margin: 3px;
+        background-color: black;
+        border:none;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 7px #af69cd;
+        color:white;
+        display: flex;            
+        justify-content: center;  
+        align-items: center; 
+      
+    }
+    .botao:hover {
+            background-color: #4b0081; /* Cor ao passar o mouse */
+            color: white;
+            box-shadow: 0 0 20px #cb9bde;}
+ #result {
+    background-color: black;
+    width: 220px;
+    height: 35px;
+    margin: 10px;
+    font-size: 30px;
+    color: white;
+    text-align: right;
+    padding: 5px;
+
+ }
+
+ .botao-0 { border-radius: 30px;
+ }
+ .botao-igual {border-radius: 30px;
+background-color: #6d00a1;
+ }
+ .button-special{
+    background-color: #6d00a1;
+ }
+
+ .button-special2{
+    background-color: #9032bb;
+ }
+ .button-special3{
+    background-color: #af69cd}
+     </style>
+</head>
+<body>
+   <div class="fotter">
+    <footer>by Gabrielle Carvalho</footer> 
+   </div> 
+   <div class='fundo' >
+   <div class="Calculator">
+    <h1>Calculator</h1>
+    <P ID="result"></P>
+    <table>
+
+        <tr>
+            <td><button class="botao button-special"  onclick="clean()">C</button></td>
+            <td><button class="botao button-special" onclick="back()"><</button></td>
+            <td><button class="botao button-special" onclick="insert('/')">/</button></td>
+            <td><button class="botao button-special" onclick="insert('*')">X</button></td>
+        </tr>
+        <tr>
+            <td><button class="botao button-special2" onclick="insert('7')">7</button></td>
+            <td><button class="botao button-special2" onclick="insert('8')">8</button></td>
+            <td><button class="botao button-special2" onclick="insert('9')">9</button></td>
+            <td><button class="botao button-special" onclick="insert('-')"">-</button></td>
+        </tr>
+        <tr>
+            <td><button class="botao button-special3" onclick="insert('4')">4</button></td>
+            <td><button class="botao button-special3" onclick="insert('5')">5</button></td>
+            <td><button class="botao button-special2" onclick="insert('6')">6</button></td> 
+            <td><button class="botao button-special" onclick="insert('+')">+</button></td>
+        </tr>
+        <tr>
+            <td><button class="botao button-special3" onclick="insert('1')">1</button></td>
+            <td><button class="botao button-special3" onclick="insert('2')">2</button></td>
+            <td><button class="botao button-special2" onclick="insert('3')">3</button></td>
+            <td rowspan="2"><button class="botao botao-igual" onclick="calcular()" style="height: 126px;">=</button></td>
+        </tr>
+        <tr>
+            <td colspan="2"><button class="botao botao-0 button-special3" onclick="insert('0')" style="width: 122px;">0</button></td>
+            <td><button class="botao button-special2" onclick="insert('.')">.</button></td>
+         
+        </tr>
+    </div>
+    </table>
+   </div>
+</div>
+<script>
+    function insert(num)
+    {
+        var resultElement = document.getElementById('result');
+        var current = resultElement.innerHTML;
+
+        if (current === "Nothing to calculate...") 
+        {
+        resultElement.innerHTML = "";
+        resultElement.style.fontSize = "30px";
+        current = "";
+    }
+    var lastChar = current.slice(-1);
+    if (["+","-","*","/"].includes(lastChar)&&['+','-','*','/'].includes(num))
+    {
+        return;
+    }
+     resultElement.innerHTML = current + num;
+     adjustFontSize();
+
+    }
+    function adjustFontSize() {
+        var resultElement = document.getElementById('result');
+        var maxWidth = resultElement.clientWidth;
+        while (resultElement.scrollWidth> maxWidth) 
+        {
+            var currentFontSize = window.getComputedStyle ( resultElement, null).getPropertyValue('font-size');
+            var newFontSize = (parseFloat(currentFontSize) -1) + "px";
+            resultElement.style.fontSize = newFontSize;
+            
+        }
+    }
+    function clean()
+    {
+        document.getElementById("result").innerHTML = "";
+        document.getElementById('result').style.fontSize = '30px';
+    }
+    function back()
+    {
+        var result = document.getElementById("result").innerHTML;
+        document.getElementById('result').innerHTML = result.substring(0, result.length -1);
+        adjustFontSize();
+    }
+    function calcular()
+    {
+        var result = document.getElementById('result').innerHTML;
+       
+         if(['+','-','*','/'].includes(result.slice(-1)))
+         { 
+            result = result.slice(0, -1);
+         }    
+    
+            if (result && !/^[+\-*]+$/.test(result))
+         {
+            try 
+            {
+            document.getElementById("result").innerHTML = eval(result);
+         } catch {
+            document.getElementById('result').innerHTML= 'Error';
+         }
+
+          adjustFontSize();
+        }
+         
+         else{
+            document.getElementById("result").innerHTML = "Nothing to calculate...";
+            document.getElementById('result').style.fontSize = '20px'; 
+    }   }
+
+    
+
+</script>
+
+</body>
+</html>
